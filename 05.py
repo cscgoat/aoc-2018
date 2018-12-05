@@ -2,28 +2,25 @@
 
 d = open("05.in").read().strip()
 
+mat = {}
+for i in range(97, 123):
+    mat[chr(i)] = chr(i).upper()
+    mat[chr(i).upper()] = chr(i)
+
 def p(d):
-    while True:
-        for i in range(len(d)-1):
-            if d[i].lower() == d[i+1].lower() and \
-            ( (d[i].islower() and d[i+1].isupper()) or \
-            (d[i].isupper() and d[i+1].islower()) ):
-                r = d[i] + d[i+1]
-                d = d.replace(r, "", 1)
-                break;
-        if i == len(d)-2:
-            return len(d)
+    s = []
+    for c in d:
+        if s and c == mat[s[-1]]: s.pop()
+        else: s.append(c)
+    return len(s)
 
 print(p(d))
 
 low = 0
-
 for i in range(97,123):
     use = chr(i)
-    f = len(d)
-    temp = d.replace(use, "").replace(use.upper(),"")
-    if f == len(temp): continue
-    l = p(temp)
+    tmp = [c for c in d if c!=use.lower() and c!=use.upper()]
+    l = p(tmp)
     if i == 97: low = l
     else: low = min(l,low)
 print(low)
